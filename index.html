@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>meisano | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --accent-color: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --radius: 30px;
+            --font-main: 'Inter', sans-serif;
+            --font-accent: 'Syne', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--accent-color);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Canvas для частиц */
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* Эффект Liquid Glass для контейнеров */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px) saturate(180%);
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 40px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+
+        /* Header / Hero Section */
+        header {
+            text-align: center;
+            margin-bottom: 100px;
+            padding-top: 50px;
+        }
+
+        .logo {
+            font-family: var(--font-accent);
+            font-size: clamp(60px, 15vw, 120px);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            line-height: 0.9;
+            margin-bottom: 20px;
+            background: linear-gradient(180deg, #fff 0%, #444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.6;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Navigation Tabs */
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            font-family: var(--font-main);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: black;
+        }
+
+        /* Sections */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Experience & Code Info */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        h2 {
+            font-family: var(--font-accent);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .feature-box {
+            margin-bottom: 20px;
+        }
+
+        .feature-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Stars & Reviews Style */
+        .stars-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .star-icon {
+            fill: #fff;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Links */
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: black;
+            background: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 800;
+            margin-top: 20px;
+            transition: 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Code block mockup */
+        .code-window {
+            background: #000;
+            border-radius: 15px;
+            padding: 20px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #888;
+            border: 1px solid #222;
+        }
+
+        .code-keyword { color: #fff; }
+
+        footer {
+            text-align: center;
+            padding: 100px 0;
+            opacity: 0.4;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="logo">meisano</div>
+            <div class="subtitle">Experience Design & Full-stack Code</div>
+        </header>
+
+        <nav class="tabs-nav">
+            <button class="tab-btn active" onclick="openTab(event, 'about')">About</button>
+            <button class="tab-btn" onclick="openTab(event, 'experience')">Experience</button>
+            <button class="tab-btn" onclick="openTab(event, 'contact')">Contact</button>
+        </nav>
+
+        <section id="about" class="content-section active">
+            <div class="glass-card">
+                <h2>Technical Persona</h2>
+                <div class="grid">
+                    <div class="feature-box">
+                        <p>Я создаю цифровые интерфейсы, где эстетика встречается с безупречным кодом. Специализируюсь на глубокой кастомизации и создании уникальных визуальных решений.</p>
+                    </div>
+                    <div class="code-window">
+                        <span class="code-keyword">const</span> developer = {<br>
+                        &nbsp;&nbsp;name: <span class="code-keyword">"meisano"</span>,<br>
+                        &nbsp;&nbsp;focus: <span class="code-keyword">"Liquid UI / UX"</span>,<br>
+                        &nbsp;&nbsp;experience: <span class="code-keyword">"5+ years"</span>,<br>
+                        &nbsp;&nbsp;status: <span class="code-keyword">"Building Future"</span><br>
+                        };
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="content-section">
+            <div class="glass-card">
+                <h2>Experience & Trust</h2>
+                <p style="margin-bottom: 30px; opacity: 0.7;">Моя репутация строится на качестве исполнения и внимании к деталям.</p>
+                
+                <div class="grid">
+                    <div class="feature-box">
+                        <div class="stars-container">
+                            <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                            <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                            <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                            <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                            <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                        </div>
+                        <h3>Высший рейтинг</h3>
+                        <p>За каждый завершенный проект я получаю высший балл. Звезды — это не просто иконки, это подтвержденный опыт в дизайне.</p>
+                    </div>
+                    
+                    <div class="feature-box">
+                        <div style="font-size: 2.5rem; font-family: var(--font-accent);">99+</div>
+                        <h3>Завершенных кейсов</h3>
+                        <p>От минималистичных лендингов до сложных экосистем. Мой опыт в дизайне позволяет видеть проект насквозь еще до начала кодинга.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="content-section">
+            <div class="glass-card" style="text-align: center;">
+                <h2>Let's Connect</h2>
+                <p>Готов к реализации ваших самых смелых идей. Пишите напрямую в Telegram.</p>
+                
+                <a href="https://t.me/meisano" class="social-link">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-1.92 9.041c-.145.639-.524.796-1.059.495l-2.92-2.154-1.408 1.354c-.156.156-.287.287-.588.287l.209-2.969 5.402-4.881c.235-.209-.051-.325-.363-.117l-6.678 4.204-2.879-.899c-.627-.196-.639-.627.131-.926l11.248-4.335c.52-.191.975.121.822.85z"/></svg>
+                    t.me/meisano
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            &copy; 2024 MEISANO. DESIGNED FOR THE BOLD.
+        </footer>
+    </div>
+
+    <script>
+        // Табы
+        function openTab(evt, tabName) {
+            const sections = document.getElementsByClassName("content-section");
+            for (let i = 0; i < sections.length; i++) {
+                sections[i].classList.remove("active");
+            }
+            const buttons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Система частиц
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#fff';
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 2) - 1;
+                let directionY = (Math.random() * 2) - 1;
+                let color = '#ffffff';
+
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                        opacityValue = 1 - (distance / 20000);
+                        ctx.strokeStyle = 'rgba(255,255,255,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        window.addEventListener('resize', function() {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            init();
+        });
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
